@@ -1,0 +1,12 @@
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - script: docker build -t todo-api:$(Build.BuildId) .
+    displayName: 'Build and Test'
+
+  - script: docker images todo-api
+    displayName: 'Show Image'
