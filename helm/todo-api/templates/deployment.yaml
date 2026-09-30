@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-api
+  name: {{ .Release.Name }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: todo-api
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: todo-api
+        app: {{ .Release.Name }}
     spec:
       containers:
         - name: todo-api
-          image: todo-api:1.1
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - containerPort: 3000
           envFrom:
             - configMapRef:
-                name: todo-api-config
+                name: {{ .Release.Name }}-config
           readinessProbe:
             httpGet:
               path: /health
@@ -33,9 +33,4 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 10
           resources:
-            requests:
-              cpu: 50m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
+            {{- toYaml .Values.resources | nindent 12 }}

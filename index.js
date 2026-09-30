@@ -23,7 +23,7 @@ function createServer() {
     console.log(JSON.stringify({ level: 'INFO', method: req.method, url: req.url }));
 
     if (req.method === 'GET' && req.url === '/health') {
-      return send(res, 200, { status: 'ok' });
+     return send(res, 200, { status: 'ok', env: process.env.APP_ENV || 'local' });
     }
     if (req.method === 'GET' && req.url === '/todos') {
       return send(res, 200, todos);
